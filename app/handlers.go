@@ -3,9 +3,11 @@ package app
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"net/http"
 
 	"github.com/Fakorede/banking/service"
+	"github.com/gorilla/mux"
 )
 
 // Customer struct
@@ -21,11 +23,7 @@ type CustomerHandlers struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	// customers := []Customer{
-	// 	{Name: "John", City: "Wick", Zipcode: "110121"},
-	// 	{Name: "Brad", City: "Traversy", Zipcode: "110121"},
-	// }
-	customers, _ := ch.service.GetAllCustomer()
+	customers, _ := ch.service.GetAllCustomers()
 
 	// content header
 	if r.Header.Get("Content-Type") == "application/xml" {
@@ -35,4 +33,18 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(customers)
 	}
+}
+
+func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["customer_id"]
+
+	customer, err := ch.service.GetCustomer(id)
+	if err != nil {
+		w.WriteHeader(err.Code)
+		fmt.Fprintf(w, err.Message)
+	} else {
+		w.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(customer)
+	}
+
 }

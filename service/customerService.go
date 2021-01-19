@@ -1,10 +1,14 @@
 package service
 
-import "github.com/Fakorede/banking/domain"
+import (
+	"github.com/Fakorede/banking/domain"
+	"github.com/Fakorede/banking/errs"
+)
 
 // CustomerService interface
 type CustomerService interface {
-	GetAllCustomer() ([]domain.Customer, error)
+	GetAllCustomers() ([]domain.Customer, error)
+	GetCustomer(string) (*domain.Customer, *errs.APIErrors)
 }
 
 // DefaultCustomerService struct
@@ -12,9 +16,14 @@ type DefaultCustomerService struct {
 	repo domain.CustomerRepository
 }
 
-// GetAllCustomer return customers
-func (s DefaultCustomerService) GetAllCustomer() ([]domain.Customer, error) {
+// GetAllCustomers function
+func (s DefaultCustomerService) GetAllCustomers() ([]domain.Customer, error) {
 	return s.repo.FindAll()
+}
+
+// GetCustomer return customers by id
+func (s DefaultCustomerService) GetCustomer(id string) (*domain.Customer, *errs.APIErrors) {
+	return s.repo.FindByID(id)
 }
 
 // NewCustomerService instantiate this service

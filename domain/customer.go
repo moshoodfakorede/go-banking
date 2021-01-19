@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/Fakorede/banking/errs"
+
 // Customer struct
 type Customer struct {
 	ID          string
@@ -13,4 +15,5 @@ type Customer struct {
 // CustomerRepository repository
 type CustomerRepository interface {
 	FindAll() ([]Customer, error)
+	FindByID(string) (*Customer, *errs.APIErrors)
 }
