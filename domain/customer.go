@@ -14,6 +14,7 @@ type Customer struct {
 
 // CustomerRepository repository
 type CustomerRepository interface {
-	FindAll() ([]Customer, error)
+	// 1 == active, 0 == inactive
+	FindAll(status string) ([]Customer, *errs.APIErrors)
 	FindByID(string) (*Customer, *errs.APIErrors)
 }
