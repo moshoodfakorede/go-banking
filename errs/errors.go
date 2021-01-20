@@ -4,8 +4,15 @@ import "net/http"
 
 // APIErrors struct
 type APIErrors struct {
-	Code    int
-	Message string
+	Code    int    `json:",omitempty"`
+	Message string `json:"message"`
+}
+
+// AsMessage funv
+func (e APIErrors) AsMessage() *APIErrors {
+	return &APIErrors{
+		Message: e.Message,
+	}
 }
 
 // NewNotFoundError method
